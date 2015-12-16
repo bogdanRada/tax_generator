@@ -1,25 +1,4 @@
-s.rbx/
-.bundle/
-*.gem
-.idea/
-.rvmrc
-*.swp
-log/*.log
-pkg/
-spec/dummy/db/*.sqlite3
-spec/dummy/log/*.log
-spec/dummy/tmp/
-coverage
-tags
-/nbproject/
-/.git-rewrite/
-/bin/**/*
-/data/output_*
-/data/output/**/*.hss
-/data/output/static/**/*
-# But not these files...
-
-
+# Ignore everything in this directory
+*
+# Except this file
 !.gitignore
-!/data/**/*.xml
-!/bin/multi_cap

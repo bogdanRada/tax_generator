@@ -34,15 +34,19 @@ class Actor
   end
 end
 
+class FakeCelluloidCondition
+
+  def signal
+  end
+end
+
 RSpec.configure do |config|
   require 'rspec/expectations'
   config.include RSpec::Matchers
   config.include TaxGenerator::ApplicationHelper
 
   config.mock_with :mocha
-  config.before(:all) do
-    @default_processor = TaxGenerator::Processor.new
-  end
+
 
   config.after(:suite) do
     if SimpleCov.running

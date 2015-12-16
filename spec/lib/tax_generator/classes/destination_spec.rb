@@ -1,7 +1,8 @@
 # encoding:utf-8
 require 'spec_helper'
 describe TaxGenerator::Destination do
-  let(:str) { @default_processor.destinations_file_path }
+  let(:default_processor) {TaxGenerator::Processor.new}
+  let(:str) { default_processor.destinations_file_path }
 
   let(:destination_xml) { @xml ||= Nokogiri::XML(File.open(str), nil, 'UTF-8') }
   let(:info_base) { './/practical_information/health_and_safety' }

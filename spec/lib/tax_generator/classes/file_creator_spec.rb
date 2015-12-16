@@ -1,6 +1,7 @@
 # encoding:utf-8
 require 'spec_helper'
 describe TaxGenerator::FileCreator do
+  let(:default_processor) {TaxGenerator::Processor.new}
   let(:output_folder) {"some_other_path" }
   let(:destinations_file_path) {  "some_path" }
   let(:destination_xml) { "some_xml" }
@@ -12,6 +13,7 @@ describe TaxGenerator::FileCreator do
   let(:atlas_id_value) { 'some atlas id value' }
   let(:atlas_id) { AtlasID.new(atlas_id_value) }
   let(:fake_tilt) {FakeTilt.new}
+  let(:fake_condition) {FakeCelluloidCondition.new}
 
   let(:job) { { atlas_id: atlas_id_value, taxonomy: fake_node, destination: first_destination, output_folder: output_folder } }
   before(:each) do
@@ -19,20 +21,23 @@ describe TaxGenerator::FileCreator do
     destination_xml.stubs(:xpath).returns([fake_node])
     subject.stubs(:start_work).returns(true)
     subject.stubs(:log_message).returns(true)
-    @default_processor.stubs(:register_worker_for_job).returns(true) if @default_processor.alive?
+    default_processor.stubs(:register_worker_for_job).returns(true)
     File.stubs(:open).returns(true)
     Tilt.stubs(:new).returns(fake_tilt)
     fake_tilt.stubs(:render).returns(true)
     subject.stubs(:mark_job_completed).returns(true)
+    default_processor.stubs(:condition).returns(fake_condition)
+    default_processor.stubs(:all_workers_finished).returns(false)
+    fake_condition.stubs(:signal).returns(true)
   end
 
   context 'checks the job keys' do
     before(:each) do
-      subject.work(job, @default_processor)
+      subject.work(job, default_processor)
     end
 
     specify { expect(subject.job).to eq job.stringify_keys }
-    specify { expect(subject.processor).to eq @default_processor }
+    specify { expect(subject.processor).to eq default_processor }
   end
 
   context 'processes the job' do
@@ -51,26 +56,41 @@ describe TaxGenerator::FileCreator do
     subject.template_name
   end
 
+  context "job related " do
 
-  it 'gets start work' do
-    Actor.expects(:current).returns("ahah")
-   fake_tilt.expects(:render).returns(true)
-    subject.start_work
+    before(:each) do
+      subject.work(job, default_processor)
+      default_processor.stubs(:register_worker_for_job).returns(true)
+    end
+
+    it 'gets start work' do
+      details = {details: fake_node, root: root}
+      Actor.stubs(:current).returns(subject)
+      subject.stubs(:fetch_atlas_details).returns(details)
+      fake_tilt.stubs(:render).with(subject,details).returns(true)
+      subject.start_work
+    end
+
+    it 'mark_job_completed' do
+      default_processor.jobs.expects(:[]).with(subject.job_id).returns(job)
+      job.expects(:[]=).with('status', 'finished')
+      default_processor.expects(:all_workers_finished).returns(false)
+      subject.mark_job_completed
+    end
+
+    it 'mark_job_completed and signals complete' do
+      default_processor.expects(:all_workers_finished).returns(true)
+      fake_condition.stubs(:signal).with('completed')
+      subject.mark_job_completed
+    end
+
+    it 'fetch_atlas_details' do
+      subject.taxonomy.expects(:[]).with(subject.job_id).returns(fake_node)
+      TaxGenerator::Destination.expects(:new).with(first_destination).returns(first_destination)
+      first_destination.stubs(:to_hash).returns({})
+      actual = subject.fetch_atlas_details
+      expect(actual).to eq({details: fake_node, root: root})
+    end
   end
 
-  #
-  # xit 'returns the fake node' do
-  #   taxonomy.expects(:[]).returns(fake_node)
-  #   subject.create_file(atlas_id_value, taxonomy, first_destination)
-  # end
-  #
-  # xit 'creates the file' do
-  #   subject.expects(:get_atlas_details).with(fake_node, first_destination).returns({})
-  #   subject.create_file(atlas_id_value, taxonomy, first_destination)
-  # end
-  #
-  # xit 'tries to creatte the html' do
-  #   subject.expects(:create_html).with(subject.output_folder, atlas_id, {}).returns(true)
-  #   subject.create_file(atlas_id_value, taxonomy, first_destination)
-  # end
 end

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Lonely Planet - <%= details.name %></title>
+  <link href="<%= root %>/templates/static/all.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div id="header">
+      <div id="logo"></div>
+      <h1>Lonely Planet: <%= details.content %></h1>
+    </div>
+    <div id="wrapper">
+      <div id="sidebar">
+        <div class="block">
+          <h3>Navigation</h3>
+
+          <div class="content">
+            <div class="inner">
+              <ul class="navigation">
+                <% unless details.parent.nil? %>
+                <li><a href="<%= details.parent.name %>.html">Up to <%= details.parent.content %></a>
+                  <li/>
+                  <% end %>
+                  <% unless details.children.nil? %>
+                  <% details.children.each do |child| %>
+                  <li><a href="<%= child.name %>.html"><%= child.content %></a></li>
+                  <% end %>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="main">
+          <div class="block">
+            <div class="secondary-navigation">
+              <ul>
+                <li class="first"><a href="<%= details.name %>.html"><%= details.content %></a></li>
+              </ul>
+              <div class="clear"></div>
+            </div>
+            <div class="content">
+              <div class="inner">
+                <% if defined?(introduction) && introduction.present? %>
+                <h3>Introduction</h3>
+                <p>
+                  <%=  introduction%>
+                </p>
+                <% end %>
+
+                <% if defined?(history) && history.present? %>
+                <h3>History</h3>
+                <p>
+                  <%=  history%>
+                </p>
+                <% end %>
+                  <% if defined?(practical_information) && practical_information.present? %>
+                <h3>Practical Information</h3>
+                <p>
+                  <%= practical_information  %>
+                </p>
+                <% end %>
+                  <% if defined?(transport) && transport.present? %>
+                <h3>Transport</h3>
+                <p>
+                  <%= transport %>
+                </p>
+                <% end %>
+                  <% if defined?(weather) && weather.present? %>
+                <h3>Weather</h3>
+                <p>
+                  <%= weather %>
+                </p>
+                <% end %>
+                  <% if defined?(work_live_study) && work_live_study.present? %>
+                <h3>Work Live Study</h3>
+                <p>
+                  <%= work_live_study %>
+                </p>
+                <% end %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>

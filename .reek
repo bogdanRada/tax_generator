@@ -1,0 +1,10 @@
+---
+Attribute:
+  enabled: false
+TooManyInstanceVariables:
+  enabled: false
+TooManyMethods:
+  enabled: false
+exclude_paths:
+ - spec
+ - bin

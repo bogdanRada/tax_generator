@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<taxonomies>
+<taxonomy>
+<taxonomy_name>World</taxonomy_name>
+<node atlas_node_id = "355064" ethyl_content_object_id="82534" geo_id = "355064">
+<node_name>Africa</node_name>
+<node atlas_node_id = "355611" ethyl_content_object_id="3210" geo_id = "355611">
+<node_name>South Africa</node_name>
+<node atlas_node_id = "355612" ethyl_content_object_id="35474" geo_id = "355612">
+<node_name>Cape Town</node_name>
+<node atlas_node_id = "355613" ethyl_content_object_id="" geo_id = "355613">
+<node_name>Table Mountain National Park</node_name>
+</node>
+</node>
+<node atlas_node_id = "355614" ethyl_content_object_id="" geo_id = "355614">
+<node_name>Free State</node_name>
+<node atlas_node_id = "355615" ethyl_content_object_id="1000550692" geo_id = "355615">
+<node_name>Bloemfontein</node_name>
+</node>
+</node>
+<node atlas_node_id = "355616" ethyl_content_object_id="" geo_id = "355616">
+<node_name>Gauteng</node_name>
+<node atlas_node_id = "355617" ethyl_content_object_id="37710" geo_id = "355617">
+<node_name>Johannesburg</node_name>
+</node>
+<node atlas_node_id = "355618" ethyl_content_object_id="1000548256" geo_id = "355618">
+<node_name>Pretoria</node_name>
+</node>
+</node>
+<node atlas_node_id = "355619" ethyl_content_object_id="" geo_id = "355619">
+<node_name>KwaZulu-Natal</node_name>
+<node atlas_node_id = "355620" ethyl_content_object_id="43725" geo_id = "355620">
+<node_name>Durban</node_name>
+</node>
+<node atlas_node_id = "355621" ethyl_content_object_id="1000576780" geo_id = "355621">
+<node_name>Pietermaritzburg</node_name>
+</node>
+</node>
+<node atlas_node_id = "355622" ethyl_content_object_id="" geo_id = "355622">
+<node_name>Mpumalanga</node_name>
+<node atlas_node_id = "355623" ethyl_content_object_id="67561" geo_id = "355623">
+<node_name>Kruger National Park</node_name>
+</node>
+</node>
+<node atlas_node_id = "355624" ethyl_content_object_id="" geo_id = "355624">
+<node_name>The Drakensberg</node_name>
+<node atlas_node_id = "355625" ethyl_content_object_id="" geo_id = "355625">
+<node_name>Royal Natal National Park</node_name>
+</node>
+</node>
+<node atlas_node_id = "355626" ethyl_content_object_id="" geo_id = "355626">
+<node_name>The Garden Route</node_name>
+<node atlas_node_id = "355627" ethyl_content_object_id="" geo_id = "355627">
+<node_name>Oudtshoorn</node_name>
+</node>
+<node atlas_node_id = "355628" ethyl_content_object_id="" geo_id = "355628">
+<node_name>Tsitsikamma Coastal National Park</node_name>
+</node>
+</node>
+</node>
+<node atlas_node_id = "355629" ethyl_content_object_id="3263" geo_id = "355629">
+<node_name>Sudan</node_name>
+<node atlas_node_id = "355630" ethyl_content_object_id="" geo_id = "355630">
+<node_name>Eastern Sudan</node_name>
+<node atlas_node_id = "355631" ethyl_content_object_id="" geo_id = "355631">
+<node_name>Port Sudan</node_name>
+</node>
+</node>
+<node atlas_node_id = "355632" ethyl_content_object_id="" geo_id = "355632">
+<node_name>Khartoum</node_name>
+</node>
+</node>
+<node atlas_node_id = "355633" ethyl_content_object_id="3272" geo_id = "355633">
+<node_name>Swaziland</node_name>
+</node>
+</node>
+</taxonomy>
+</taxonomies>

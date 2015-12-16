@@ -18,6 +18,7 @@ require 'fileutils'
 require 'ostruct'
 require 'erb'
 require 'tilt'
+require 'tilt/erb'
 
 %w(classes helpers).each do |folder_name|
   Gem.find_files("tax_generator/#{folder_name}/**/*.rb").each { |path| require path }

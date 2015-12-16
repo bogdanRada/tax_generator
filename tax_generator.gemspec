@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'slop', '~> 4.2', '>= 4.2.1'
   s.add_runtime_dependency 'activesupport', '~> 4.2', '>= 4.2.5'
   s.add_runtime_dependency 'rubytree', '~> 0.9', '>= 0.9.6'
-  s.add_runtime_dependency 'tilt', '~> 1.4', '>= 1.4.1'
+  s.add_runtime_dependency 'tilt', '~> 2.0', '>= 2.0.1'
 
   s.add_development_dependency 'rake', '~> 10.4', '>= 10.4.2'
   s.add_development_dependency 'rspec', '~> 3.3', '>= 3.3'

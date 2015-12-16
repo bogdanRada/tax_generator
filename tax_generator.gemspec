@@ -4,10 +4,10 @@ Gem::Specification.new do |s|
   s.name = 'tax_generator'
   s.version = TaxGenerator.gem_version
   s.platform = Gem::Platform::RUBY
-  s.description = 'Tax generator is a simple XML processor and generator of HTMl files'
+  s.description = 'Tax generator is a simple XML processor and generator of HTMl files and uses celluloid to generate files in asyncronous way'
   s.email = 'raoul_ice@yahoo.com'
   s.homepage = 'http://github.com/bogdanRada/tax_generator/'
-  s.summary = 'Tax generator is a simple XML processor and generator of HTMl files'
+  s.summary = 'Tax generator is a simple XML processor and generator of HTMl files and generates files asynchronously'
   s.authors = ['bogdanRada']
   s.date = Date.today
 
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'rubytree', '~> 0.9', '>= 0.9.6'
   s.add_runtime_dependency 'tilt', '~> 1.4', '>= 1.4.1'
 
-  s.add_development_dependency 'rake', '>= 3.3', '>= 3.3'
+  s.add_development_dependency 'rake', '~> 10.4', '>= 10.4.2'
   s.add_development_dependency 'rspec', '~> 3.3', '>= 3.3'
   s.add_development_dependency 'simplecov', '~> 0.10', '>= 0.10'
   s.add_development_dependency 'simplecov-summary', '~> 0.0.4', '>= 0.0.4'

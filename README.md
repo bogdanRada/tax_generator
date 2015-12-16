@@ -6,7 +6,7 @@ tax_generator
 Description
 -----------
 
-Simple batch processor that takes 2 xml files as input and generates html files with information from the xml elements.
+Simple batch processor that takes 2 xml files as input and generates html files with information from the xml elements and uses celluloid to generate files in asyncronous way
 
 -	*taxonomy.xml* holds the information about how elements are related to each other.
 

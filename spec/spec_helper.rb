@@ -45,3 +45,5 @@ RSpec.configure do |config|
     end
   end
 end
+
+Celluloid.logger = nil

@@ -82,8 +82,8 @@ module TaxGenerator
     def file_options
       @opts.separator ''
       @opts.separator 'Extra options:'
-      @opts.string '-t', '--taxonomy_file_name', 'The taxonomy file name', default: 'taxonomy.xml'
-      @opts.string '-d', '--destinations_file_name', 'The destinations file name', default: 'destinations.xml'
+      @opts.string '-t', '--taxonomy_filename', 'The taxonomy file name', default: 'taxonomy.xml'
+      @opts.string '-d', '--destinations_filename', 'The destinations file name', default: 'destinations.xml'
     end
 
     #  sets the version of the gem available to be displayed from command line

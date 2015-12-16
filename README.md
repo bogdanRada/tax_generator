@@ -64,9 +64,9 @@ where **options** should be a hash that can contain this keys:
 	-	Represents where the taxonomy and the destinations xml files are located ( Default is './data/input')
 -	output_dir
 	-	Represents where the newly created html files will be located ( Default is './data/output')
--	taxonomy_file_name
+-	taxonomy_filename
 	-	Represents the taxonomy file name ( Default is 'taxonomy.xml')
--	destinations_file_name
+-	destinations_filename
 	-	Represents the destinations xml file name ( Default is 'destinations.xml')
 
 This can also be run from command line using following command:
@@ -87,11 +87,11 @@ Available command line options when executing a command
 
 	-	Represents where the newly created html files will be located ( Default is './data/output')
 
--	-t or --taxonomy_file_name
+-	-t or --taxonomy_filename
 
 	-	Represents the taxonomy file name ( Default is 'taxonomy.xml')
 
--	-d or --destinations_file_name
+-	-d or --destinations_filename
 
 	-	Represents the destinations xml file name ( Default is 'destinations.xml')
 

@@ -70,7 +70,7 @@ module TaxGenerator
     #
     # @api public
     def taxonomy_file_name
-      @options.fetch(:taxonomy_file_name, 'taxonomy.xml')
+      @options.fetch(:taxonomy_filename, 'taxonomy.xml')
     end
 
     #  returns the destinations filename from the option list
@@ -80,7 +80,7 @@ module TaxGenerator
     #
     # @api public
     def destinations_file_name
-      @options.fetch(:destinations_file_name, 'destinations.xml')
+      @options.fetch(:destinations_filename, 'destinations.xml')
     end
 
     #  returns the output folder path from the option list

@@ -26,9 +26,10 @@ Requirements
 1.	[Ruby 1.9.x or Ruby 2.x.x](http://www.ruby-lang.org)
 2.	[ActiveSuport >= 4.2.0](https://rubygems.org/gems/activesupport)
 3.	[celluloid >= 0.16.0](https://github.com/celluloid/celluloid)
-4.	[nokogiri >= 1.6.7](https://github.com/sparklemotion/nokogiri)
-5.	[slop >= 4.2.1](https://github.com/leejarvis/slop)
-6.	[rubytree >= 0.9.6](https://github.com/evolve75/RubyTree)
+4.	[celluloid-pmap >= 0.2.2](https://github.com/jwo/celluloid-pmap)
+5.	[nokogiri >= 1.6.7](https://github.com/sparklemotion/nokogiri)
+6.	[slop >= 4.2.1](https://github.com/leejarvis/slop)
+7.	[rubytree >= 0.9.6](https://github.com/evolve75/RubyTree)
 
 Compatibility
 -------------

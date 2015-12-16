@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'pathname'
+bin_file = Pathname.new(__FILE__).realpath
+# add self to libpath
+$LOAD_PATH.unshift File.expand_path('../../lib', bin_file)
+require 'tax_generator/cli'
+TaxGenerator::CLI.start

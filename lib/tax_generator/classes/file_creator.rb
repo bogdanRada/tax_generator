@@ -56,6 +56,7 @@ module TaxGenerator
     #
     # @api public
     def process_job(job)
+      job = job.stringify_keys
       @destination = job['destination']
       @job_id = job['atlas_id']
       @taxonomy = job['taxonomy']
@@ -69,7 +70,7 @@ module TaxGenerator
     # @api public
     def start_work
       log_message "Generating html for destination #{@job_id}"
-      output = Tilt.new(template_name).render(self, fetch_atlas_details)
+      output = Tilt.new(template_name).render(Actor.current, fetch_atlas_details)
       File.open(File.join(@output_folder, "#{@job_id}.html"), 'w') { |file| file << output }
       mark_job_completed
     end

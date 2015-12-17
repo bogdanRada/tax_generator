@@ -12,31 +12,17 @@ SimpleCov.start 'rails' do
   at_exit {}
 end
 
-# fake class to use for elements that need atlas id as attribute
-AtlasID = Struct.new(:value)
 
-# fake class to use for elements that need atlas id as attribute
-FakeNode = Struct.new(:value)
 
-#fake class for tilt
-class FakeTilt
-
-  def render(*args) end
-end
 
 require 'bundler/setup'
 require 'tax_generator'
 require_relative '../lib/tax_generator/helpers/application_helper'
 require 'rspec'
-# fake class for actors
+#fake actor class
 class Actor
   def self.current
-  end
-end
-
-class FakeCelluloidCondition
-
-  def signal
+    Struct.new(:link)
   end
 end
 
@@ -46,7 +32,6 @@ RSpec.configure do |config|
   config.include TaxGenerator::ApplicationHelper
 
   config.mock_with :mocha
-
 
   config.after(:suite) do
     if SimpleCov.running
@@ -58,3 +43,9 @@ RSpec.configure do |config|
 end
 
 Celluloid.logger = nil
+
+at_exit do
+  Celluloid::Actor.all.each do |actor|
+    Celluloid::Actor.kill(actor)
+  end
+end

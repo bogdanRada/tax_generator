@@ -8,11 +8,11 @@ describe TaxGenerator::FileCreator do
   let(:subject) { TaxGenerator::FileCreator.new }
   let(:first_destination) { "some destination" }
 
-  let(:fake_node) { FakeNode.new('something') }
+  let(:fake_node) { mock }
 
   let(:atlas_id_value) { 'some atlas id value' }
-  let(:atlas_id) { AtlasID.new(atlas_id_value) }
-  let(:fake_tilt) {FakeTilt.new}
+  let(:atlas_id) { mock }
+  let(:fake_tilt) {mock}
 
 
   let(:job) { { atlas_id: atlas_id_value, taxonomy: fake_node, destination: first_destination, output_folder: output_folder } }

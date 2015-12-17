@@ -1,30 +1,48 @@
 # encoding:utf-8
 require 'spec_helper'
 describe TaxGenerator::Processor do
-  let(:subject) {TaxGenerator::Processor.new}
 
-  # it 'parses the xml' do
-  #   subject.expects(:nokogiri_xml).with(destinations_file_path).returns(destination_xml)
-  #   actual = subject.destinations
-  #   expect(actual).to eq destination_xml
-  # end
-  #
-  # it 'generates the files with 0' do
-  #   subject.expects(:create_file).with(0, taxonomy, nil).returns(true)
-  #   subject.generate_files(taxonomy)
-  # end
-  #
-  # it 'searches the destinations' do
-  #   subject.destinations.expects(:xpath).with('//destination').returns([])
-  #   subject.generate_files(taxonomy)
-  # end
-  #
-  # it 'tries to create all the files for all destinations' do
-  #   destination_xml.xpath('//destination').each do |destination|
-  #     destination.expects(:attributes).returns('atlas_id' => atlas_id)
-  #     subject.expects(:create_file).with(atlas_id.value, taxonomy, destination).returns(true)
-  #   end
-  #   subject.generate_files(taxonomy)
-  # end
+  let(:actor_pool) {mock}
+  let(:workers) { TaxGenerator::FileCreator.new }
+
+  before(:each) do
+      Celluloid::SupervisionGroup.stubs(:run!).returns(actor_pool)
+      actor_pool.stubs(:pool).returns(workers)
+      Actor.current.stubs(:link).returns(true)
+  end
+
+  context "intialize" do
+
+    it 'boots the celluloid' do
+      Celluloid.expects(:boot).returns(true)
+      TaxGenerator::Processor.new
+    end
+
+    it 'runs the supervision group' do
+      Celluloid::SupervisionGroup.expects(:run!).returns(actor_pool)
+      TaxGenerator::Processor.new
+    end
+
+    it 'creates the pool of workers' do
+      actor_pool.expects(:pool).with(TaxGenerator::FileCreator, as: :workers, size: 50).returns(workers)
+      TaxGenerator::Processor.new
+    end
+
+
+    it "links the actor to the current actor" do
+      Actor.current.expects(:link).with(workers)
+      TaxGenerator::Processor.new
+    end
+
+
+  end
+
+  context "intialize" do
+    let(:subject) {TaxGenerator::Processor.new}
+
+
+
+  end
+
 
 end

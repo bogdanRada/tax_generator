@@ -23,10 +23,28 @@ module TaxGenerator
     def initialize(file_path)
       @document = nokogiri_xml(file_path)
       taxonomy_root = @document.at_xpath('//taxonomy_name')
-      @root_node = Tree::TreeNode.new(taxonomy_root.content, nil)
-      @document.xpath('//node').pmap do |taxonomy_node|
+      @root_node = Tree::TreeNode.new('0', taxonomy_root.content)
+      @document.xpath('.//taxonomy/node').pmap do |taxonomy_node|
         add_node(taxonomy_node, @root_node)
       end
+    end
+
+    #  finds a node by the name in the tree list
+    #
+    # @param  [String]  node_id the name of the node that needs to be found
+    # @param  [Tree::TreeNode]  node the node that will be used to search in
+    # @param  [Array]  list the list that holds the nodes
+    #
+    # @return [void]
+    #
+    # @api public
+    def find_by_name(node_id, node = @root_node, list = [])
+      if node.name.to_s == node_id.to_s
+        list << node
+      else
+        node.children.each { |child| find_by_name(node_id, child, list) }
+      end
+      list.compact
     end
 
     #  gets the atlas_id from the nokogiri element and then searches first child whose name is 'node_name'
@@ -77,7 +95,7 @@ module TaxGenerator
       return unless taxonomy_node.children.any?
       tax_node = add_taxonomy_node(taxonomy_node, node)
       taxonomy_node.xpath('./node').pmap do |child_node|
-        add_taxonomy_node(child_node, tax_node) if tax_node.present?
+        add_node(child_node, tax_node) if tax_node.present?
       end
     end
 

@@ -63,6 +63,15 @@ module TaxGenerator
       @output_folder = job['output_folder']
     end
 
+    #  finds all the nodes in the tree with the given name
+    #
+    # @return [Array<Tree::TreeNode>]
+    #
+    # @api public
+    def atlas_node
+      @taxonomy.find_by_name(@job_id).first
+    end
+
     #  renders the template and creates new file with the template html
     #
     # @return [void]
@@ -91,7 +100,6 @@ module TaxGenerator
     #
     # @api public
     def fetch_atlas_details
-      atlas_node = @taxonomy[@job_id]
       content = @destination.present? ? TaxGenerator::Destination.new(@destination).to_hash : {}
       content.merge(details: atlas_node)
     end

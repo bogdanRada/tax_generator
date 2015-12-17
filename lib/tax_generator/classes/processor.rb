@@ -17,15 +17,13 @@ module TaxGenerator
   #   @return [Hash] each key from the list is the job id, and the value is the worker that will handle the job
   # @!attribute worker_to_job
   #   @return [Hash] each key from the list is the workers mailbox address, and the value is the job being handled by the worker
-  # @!attribute condition
-  #   @return [Celluloid::Condition] the supervision group that supervises workers
   class Processor
     include Celluloid
     include Celluloid::Logger
     include Celluloid::Notifications
     include TaxGenerator::ApplicationHelper
 
-    attr_reader :options, :worker_supervisor, :workers, :taxonomy, :jobs, :job_to_worker, :worker_to_job, :condition
+    attr_reader :options, :worker_supervisor, :workers, :taxonomy, :jobs, :job_to_worker, :worker_to_job
 
     trap_exit :worker_died
 
@@ -51,7 +49,6 @@ module TaxGenerator
       @jobs = {}
       @job_to_worker = {}
       @worker_to_job = {}
-      @condition = Celluloid::Condition.new
     end
 
     #  returns the input folder from the options list
@@ -210,9 +207,8 @@ module TaxGenerator
     #
     # @api public
     def wait_jobs_termination
-      result = @condition.wait
-      return unless result.present?
-      terminate if all_workers_finished?
+      sleep(0.1) until all_workers_finished?
+      terminate
     end
 
     #  registers the worker so that the current actor has access to it at any given time and starts the worker

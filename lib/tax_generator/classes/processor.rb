@@ -206,8 +206,6 @@ module TaxGenerator
     #  retrieves the information about the node from the tree and generates for each destination a new File
     # @see #create_file
     #
-    # @param  [TaxGenerator::TaxonomyTree]  taxonomy the taxonomy tree that will be used for fetching node information
-    #
     # @return [void]
     #
     # @api public

@@ -37,4 +37,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'yard-rspec', '~> 0.1', '>= 0.1'
   s.add_development_dependency 'redcarpet', '~> 3.3', '>= 3.3'
   s.add_development_dependency 'github-markup', '~> 1.3', '>= 1.3.3'
+  s.add_development_dependency 'inch', '~> 0.6', '>= 0.6'
 end

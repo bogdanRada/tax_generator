@@ -83,7 +83,7 @@ module TaxGenerator
     def mark_job_completed
       @processor.jobs[@job_id]['status'] = 'finished'
       return if !@processor.alive? || !@processor.all_workers_finished?
-      @processor.condition.signal('completed') if @processor.condition.waiters.present?
+      @processor.condition.signal('completed')
     end
 
     # fetches the details needed to be passed to the erb template

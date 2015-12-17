@@ -51,6 +51,7 @@ module TaxGenerator
       @jobs = {}
       @job_to_worker = {}
       @worker_to_job = {}
+      @condition = Celluloid::Condition.new
     end
 
     #  returns the input folder from the options list
@@ -197,10 +198,8 @@ module TaxGenerator
     #
     # @api public
     def generate_files
-      @condition = Celluloid::Condition.new
       jobs = fetch_file_jobs
       delegate_job(*jobs)
-      wait_jobs_termination
     end
 
     #  retrieves the information about the node from the tree and generates for each destination a new File
@@ -246,6 +245,7 @@ module TaxGenerator
         @taxonomy = TaxGenerator::TaxonomyTree.new(taxonomy_file_path)
         @taxonomy.print_tree
         generate_files
+        async.wait_jobs_termination
       else
         log_message('Please provide valid options', log_method: 'fatal')
       end

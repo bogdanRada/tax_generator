@@ -92,8 +92,8 @@ module TaxGenerator
     #
     # @api public
     def add_node(taxonomy_node, node)
-      return unless taxonomy_node.children.any?
       tax_node = add_taxonomy_node(taxonomy_node, node)
+      return unless taxonomy_node.children.any?
       taxonomy_node.xpath('./node').pmap do |child_node|
         add_node(child_node, tax_node) if tax_node.present?
       end

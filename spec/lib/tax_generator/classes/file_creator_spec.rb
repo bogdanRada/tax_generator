@@ -13,7 +13,7 @@ describe TaxGenerator::FileCreator do
   let(:atlas_id_value) { 'some atlas id value' }
   let(:atlas_id) { AtlasID.new(atlas_id_value) }
   let(:fake_tilt) {FakeTilt.new}
-  let(:fake_condition) {FakeCelluloidCondition.new}
+
 
   let(:job) { { atlas_id: atlas_id_value, taxonomy: fake_node, destination: first_destination, output_folder: output_folder } }
   before(:each) do
@@ -26,9 +26,7 @@ describe TaxGenerator::FileCreator do
     Tilt.stubs(:new).returns(fake_tilt)
     fake_tilt.stubs(:render).returns(true)
     subject.stubs(:mark_job_completed).returns(true)
-    default_processor.stubs(:condition).returns(fake_condition)
     default_processor.stubs(:all_workers_finished).returns(false)
-    fake_condition.stubs(:signal).returns(true)
   end
 
   context 'checks the job keys' do
@@ -59,6 +57,7 @@ describe TaxGenerator::FileCreator do
   context "job related " do
 
     before(:each) do
+
       subject.work(job, default_processor)
       default_processor.stubs(:register_worker_for_job).returns(true)
     end
@@ -72,16 +71,9 @@ describe TaxGenerator::FileCreator do
     end
 
     it 'mark_job_completed' do
-      default_processor.jobs.expects(:[]).with(subject.job_id).returns(job)
-      job.expects(:[]=).with('status', 'finished')
-      default_processor.expects(:all_workers_finished).returns(false)
+      default_processor.register_jobs(job)
       subject.mark_job_completed
-    end
-
-    it 'mark_job_completed and signals complete' do
-      default_processor.expects(:all_workers_finished).returns(true)
-      fake_condition.stubs(:signal).with('completed')
-      subject.mark_job_completed
+      expect(subject.processor.jobs[subject.job_id]).to eq(job.stringify_keys)
     end
 
     it 'fetch_atlas_details' do
@@ -89,7 +81,7 @@ describe TaxGenerator::FileCreator do
       TaxGenerator::Destination.expects(:new).with(first_destination).returns(first_destination)
       first_destination.stubs(:to_hash).returns({})
       actual = subject.fetch_atlas_details
-      expect(actual).to eq({details: fake_node, root: root})
+      expect(actual).to eq({details: fake_node})
     end
   end
 

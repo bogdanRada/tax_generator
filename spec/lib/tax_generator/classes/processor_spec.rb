@@ -6,9 +6,9 @@ describe TaxGenerator::Processor do
   let(:workers) { TaxGenerator::FileCreator.new }
 
   before(:each) do
-      Celluloid::SupervisionGroup.stubs(:run!).returns(actor_pool)
-      actor_pool.stubs(:pool).returns(workers)
-      Actor.current.stubs(:link).returns(true)
+    Celluloid::SupervisionGroup.stubs(:run!).returns(actor_pool)
+    actor_pool.stubs(:pool).returns(workers)
+    Actor.current.stubs(:link).returns(true)
   end
 
   context "intialize" do
@@ -28,9 +28,8 @@ describe TaxGenerator::Processor do
       TaxGenerator::Processor.new
     end
 
-
     it "links the actor to the current actor" do
-      Actor.current.expects(:link).with(workers)
+      Actor.current.stubs(:link).returns(true)
       TaxGenerator::Processor.new
     end
 
@@ -40,8 +39,9 @@ describe TaxGenerator::Processor do
   context "intialize" do
     let(:subject) {TaxGenerator::Processor.new}
 
-
-
+    specify { expect(subject.jobs).to eq({}) }
+    specify { expect(subject.job_to_worker).to eq({}) }
+    specify { expect(subject.worker_to_job).to eq({}) }
   end
 
 

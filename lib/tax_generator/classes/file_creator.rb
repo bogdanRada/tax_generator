@@ -93,7 +93,7 @@ module TaxGenerator
     def fetch_atlas_details
       atlas_node = @taxonomy[@job_id]
       content = @destination.present? ? TaxGenerator::Destination.new(@destination).to_hash : {}
-      content.merge(details: atlas_node, root: root)
+      content.merge(details: atlas_node)
     end
   end
 end

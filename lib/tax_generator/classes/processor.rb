@@ -211,7 +211,7 @@ module TaxGenerator
     def wait_jobs_termination
       result = @condition.wait
       return unless result.present?
-      terminate
+      terminate if all_workers_finished?
     end
 
     #  registers the worker so that the current actor has access to it at any given time and starts the worker
@@ -245,7 +245,7 @@ module TaxGenerator
         @taxonomy = TaxGenerator::TaxonomyTree.new(taxonomy_file_path)
         @taxonomy.print_tree
         generate_files
-        async.wait_jobs_termination
+        wait_jobs_termination
       else
         log_message('Please provide valid options', log_method: 'fatal')
       end

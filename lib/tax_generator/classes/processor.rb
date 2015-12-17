@@ -200,6 +200,7 @@ module TaxGenerator
     def generate_files
       jobs = fetch_file_jobs
       delegate_job(*jobs)
+      wait_jobs_termination
     end
 
     #  retrieves the information about the node from the tree and generates for each destination a new File
@@ -245,7 +246,6 @@ module TaxGenerator
         @taxonomy = TaxGenerator::TaxonomyTree.new(taxonomy_file_path)
         @taxonomy.print_tree
         generate_files
-        wait_jobs_termination
       else
         log_message('Please provide valid options', log_method: 'fatal')
       end

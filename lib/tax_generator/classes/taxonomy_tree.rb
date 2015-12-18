@@ -13,7 +13,7 @@ module TaxGenerator
 
     #  receives a file path that will be parsed and used to build the tree
     # @see Tree::TreeNode#new
-    # @see #add_node
+    # @see #find_taxonomies
     #
     # @param  [String]  file_path the path to the xml file that will be parsed and used to build the tree
     #
@@ -22,10 +22,25 @@ module TaxGenerator
     # @api public
     def initialize(file_path)
       @document = nokogiri_xml(file_path)
-      taxonomy_root = @document.at_xpath('//taxonomy_name')
-      @root_node = TaxGenerator::TaxonomyNode.new('0', taxonomy_root.content)
-      @document.xpath('.//taxonomy/node').pmap do |taxonomy_node|
-        add_node(taxonomy_node, @root_node)
+      @root_node = TaxGenerator::TaxonomyNode.new('ROOT', 'ROOT')
+      find_taxonomies
+    end
+
+    #  searches all the taxonomy elements in the document and adds them as top level nodes
+    # and then calls method add_node to search inside childrens
+    # @see #insert_node
+    # @see #add_node
+    #
+    # @return [void]
+    #
+    # @api public
+    def find_taxonomies
+      count = 0
+      @document.xpath('.//taxonomy').pmap do |taxonomy_node|
+        count += 1
+        taxonomy_name = taxonomy_node.at_xpath('.//taxonomy_name')
+        tax_node = insert_node(count.to_s, taxonomy_name.content, @root_node)
+        add_node(taxonomy_node, tax_node, skip_add: true)
       end
     end
 
@@ -60,7 +75,8 @@ module TaxGenerator
     def add_taxonomy_node(taxonomy_node, node)
       atlas_node_id = taxonomy_node.attributes['atlas_node_id']
       node_name = taxonomy_node.children.find { |child| child.name == 'node_name' }
-      insert_node(atlas_node_id, node_name, node)
+      return if atlas_node_id.blank? || node_name.blank?
+      insert_node(atlas_node_id.value, node_name.content, node)
     end
 
     #  inserts a new node in the tree by checking first if atlas_id and node_name are present
@@ -76,7 +92,7 @@ module TaxGenerator
     # @api public
     def insert_node(atlas_node_id, node_name, node)
       return if atlas_node_id.blank? || node_name.blank?
-      current_node = TaxGenerator::TaxonomyNode.new(atlas_node_id.value, node_name.content)
+      current_node = TaxGenerator::TaxonomyNode.new(atlas_node_id, node_name)
       node << current_node
       current_node
     end
@@ -91,8 +107,8 @@ module TaxGenerator
     # @return [void]
     #
     # @api public
-    def add_node(taxonomy_node, node)
-      tax_node = add_taxonomy_node(taxonomy_node, node)
+    def add_node(taxonomy_node, node, options = {})
+      tax_node = options[:skip_add].present? ? node : add_taxonomy_node(taxonomy_node, node)
       return unless taxonomy_node.children.any?
       taxonomy_node.xpath('./node').pmap do |child_node|
         add_node(child_node, tax_node) if tax_node.present?

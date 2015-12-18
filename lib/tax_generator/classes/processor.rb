@@ -178,11 +178,16 @@ module TaxGenerator
     #
     # @api public
     def fetch_file_jobs
-      jobs = [{ atlas_id: 0, taxonomy: @taxonomy, destination: nil, output_folder: output_folder }]
-      nokogiri_xml(destinations_file_path).xpath('//destination').pmap do |destination|
-        atlas_id = destination.attributes['atlas_id']
-        jobs << { atlas_id: atlas_id.value, taxonomy: @taxonomy, destination: destination, output_folder: output_folder }
+      jobs = []
+      count = 0
+      @taxonomy.document.xpath('.//taxonomy').pmap do |taxonomy_node|
+        count += 1
+        jobs << { atlas_id: count, taxonomy: @taxonomy, destination: nil, output_folder: output_folder }
       end
+        nokogiri_xml(destinations_file_path).xpath('//destination').pmap do |destination|
+          atlas_id = destination.attributes['atlas_id']
+          jobs << { atlas_id: atlas_id.value, taxonomy: @taxonomy, destination: destination, output_folder: output_folder }
+        end
       jobs
     end
 

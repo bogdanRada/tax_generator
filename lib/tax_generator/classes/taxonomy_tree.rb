@@ -23,7 +23,7 @@ module TaxGenerator
     def initialize(file_path)
       @document = nokogiri_xml(file_path)
       taxonomy_root = @document.at_xpath('//taxonomy_name')
-      @root_node = Tree::TreeNode.new('0', taxonomy_root.content)
+      @root_node = TaxGenerator::TaxonomyNode.new('0', taxonomy_root.content)
       @document.xpath('.//taxonomy/node').pmap do |taxonomy_node|
         add_node(taxonomy_node, @root_node)
       end
@@ -76,7 +76,7 @@ module TaxGenerator
     # @api public
     def insert_node(atlas_node_id, node_name, node)
       return if atlas_node_id.blank? || node_name.blank?
-      current_node = Tree::TreeNode.new(atlas_node_id.value, node_name.content)
+      current_node = TaxGenerator::TaxonomyNode.new(atlas_node_id.value, node_name.content)
       node << current_node
       current_node
     end

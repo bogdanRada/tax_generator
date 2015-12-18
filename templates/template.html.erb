@@ -14,18 +14,22 @@
     <div id="wrapper">
       <div id="sidebar">
         <div class="block">
-          <h3>Navigation</h3>
+          <h3>Parent Navigation</h3>
 
           <div class="content">
             <div class="inner">
               <ul class="navigation">
-                <% unless details.parent.nil? %>
+                <% unless details.parent.nil?  %>
+                <% unless details.parent.is_root? %>
                 <li><a href="<%= details.parent.name %>.html">Up to <%= details.parent.content %></a>
                   <li/>
                   <% end %>
-                  <% unless details.children.nil? %>
-                  <% details.children.each do |child| %>
-                  <li><a href="<%= child.name %>.html"><%= child.content %></a></li>
+                  <% end %>
+                  <% unless details.parentage.any? %>
+                  <% details.parentage.each do |parent| %>
+                  <% unless parent.is_root? %>
+                  <li><a href="<%= parent.name %>.html"><%= parent.content %></a></li>
+                  <% end %>
                   <% end %>
                   <% end %>
                 </ul>
@@ -35,9 +39,14 @@
         </div>
         <div id="main">
           <div class="block">
+            <h3>Child Navigation</h3>
             <div class="secondary-navigation">
               <ul>
-                <li class="first"><a href="<%= details.name %>.html"><%= details.content %></a></li>
+                <% if details.children.any? %>
+                <% details.children.each do |child| %>
+                <li><a href="<%= child.name %>.html"><%= child.content %></a></li>
+                <% end %>
+                <% end %>
               </ul>
               <div class="clear"></div>
             </div>

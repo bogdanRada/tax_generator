@@ -77,7 +77,7 @@ describe TaxGenerator::FileCreator do
     end
 
     it 'fetch_atlas_details' do
-      subject.taxonomy.expects(:[]).with(subject.job_id).returns(fake_node)
+      subject.stubs(:atlas_node).returns(fake_node)
       TaxGenerator::Destination.expects(:new).with(first_destination).returns(first_destination)
       first_destination.stubs(:to_hash).returns({})
       actual = subject.fetch_atlas_details

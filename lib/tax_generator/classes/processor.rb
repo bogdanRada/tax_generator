@@ -46,6 +46,9 @@ module TaxGenerator
       @worker_supervisor = Celluloid::SupervisionGroup.run!
       @workers = @worker_supervisor.pool(TaxGenerator::FileCreator, as: :workers, size: 50)
       Actor.current.link @workers
+      @jobs_mutex = Mutex.new
+      @job_to_worker_mutex = Mutex.new
+      @worker_to_job_mutex = Mutex.new
       @jobs = {}
       @job_to_worker = {}
       @worker_to_job = {}
@@ -135,7 +138,9 @@ module TaxGenerator
     #
     # @api public
     def all_workers_finished?
-      @jobs.all? { |_job_id, job| job['status'] == 'finished' }
+      @jobs_mutex.synchronize do
+        @jobs.all? { |_job_id, job| job['status'] == 'finished' }
+      end
     end
 
     #  registers all the jobs so that the managers can have access to them at any time
@@ -148,7 +153,9 @@ module TaxGenerator
     def register_jobs(*jobs)
       jobs.pmap do |job|
         job = job.stringify_keys
-        @jobs[job['atlas_id']] = job
+        @jobs_mutex.synchronize do
+          @jobs[job['atlas_id']] = job
+        end
       end
     end
 
@@ -165,8 +172,10 @@ module TaxGenerator
       # jobs need to be added into the manager before starting task to avoid adding new key while iterating
       register_jobs(*jobs)
       current_actor = Actor.current
-      @jobs.pmap do |_job_id, job|
-        @workers.async.work(job, current_actor) if @workers.alive?
+      @jobs_mutex.synchronize do
+        @jobs.pmap do |_job_id, job|
+          @workers.async.work(job, current_actor) if @workers.alive?
+        end
       end
     end
 
@@ -216,8 +225,36 @@ module TaxGenerator
       terminate
     end
 
+    # registeres a worker inside the job_to_worker storage using the 'atlas_id' key from the job hash
+    # @param  [TaxGenerator::FileCreator]  worker the worker that needs to be registered
+    # @param  [Hash]  job the job that will be used to register the worker
+    #
+    # @return [void]
+    #
+    # @api public
+    def register_job_to_worker(job, worker)
+      @job_to_worker_mutex.synchronize do
+        @job_to_worker[job['atlas_id']] = worker
+      end
+    end
+
+    # registeres a job to a worker, using the mailbox address of the worker (which is unique)
+    # @param  [TaxGenerator::FileCreator]  worker the worker that will be used to registerr the job
+    # @param  [Hash]  job the job that willbe registered to a worker
+    #
+    # @return [void]
+    #
+    # @api public
+    def register_worker_to_job(job, worker)
+      @worker_to_job_mutex.synchronize do
+        @worker_to_job[worker.mailbox.address] = job
+      end
+    end
+
     #  registers the worker so that the current actor has access to it at any given time and starts the worker
     # @see TaxGenerator::FileCreator#start_work
+    # @see #register_job_to_worker
+    # @see #register_worker_to_job
     #
     # @param  [Hash]  job the job that the worker will work
     # @param  [TaxGenerator::FileCreator]  worker the worker that will create the file
@@ -226,8 +263,8 @@ module TaxGenerator
     #
     # @api public
     def register_worker_for_job(job, worker)
-      @job_to_worker[job['atlas_id']] = worker
-      @worker_to_job[worker.mailbox.address] = job
+      register_job_to_worker(job, worker)
+      register_worker_to_job(job, worker)
       log_message("worker #{worker.job_id} registed into manager")
       Actor.current.link worker
       worker.async.start_work
@@ -252,6 +289,32 @@ module TaxGenerator
       end
     end
 
+    # fetches the job from a worker
+    # @param  [TaxGenerator::FileCreator]  worker the worker that died
+    #
+    # @return [void]
+    #
+    # @api public
+    def get_job_from_worker(worker)
+      @worker_to_job_mutex.synchronize do
+        @worker_to_job[worker.mailbox.address]
+      end
+    end
+
+    # deletes the worker from the worker_to_job storage
+    # @param  [TaxGenerator::FileCreator]  worker the worker that died
+    #
+    # @return [void]
+    #
+    # @api public
+    def delete_from_worker_to_job(worker)
+      mailbox = worker.mailbox.address
+      @worker_to_job_mutex.synchronize do
+        @worker_to_job.delete(mailbox)
+      end
+      mailbox
+    end
+
     # logs the message about working being dead if a worker crashes
     # @param  [TaxGenerator::FileCreator]  worker the worker that died
     # @param  [String]  reason the reason for which the worker died
@@ -260,10 +323,10 @@ module TaxGenerator
     #
     # @api public
     def worker_died(worker, reason)
-      mailbox_address = worker.mailbox.address
-      job = @worker_to_job.delete(mailbox_address)
+      job = get_job_from_worker(worker)
+      mailbox = delete_from_worker_to_job(worker)
       return if reason.blank? || job.blank?
-      log_message("worker job #{job['atlas_id']} with mailbox #{mailbox_address.inspect} died  for reason:  #{log_error(reason)}", log_method: 'fatal')
+      log_message("worker job #{job['atlas_id']} with mailbox #{mailbox.inspect} died  for reason:  #{log_error(reason)}", log_method: 'fatal')
     end
   end
 end

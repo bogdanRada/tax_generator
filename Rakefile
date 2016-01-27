@@ -23,5 +23,5 @@ task default: [:all]
 
 desc 'Test the plugin under all supported Rails versions.'
 task :all do |_t|
-    exec('bundle exec rubocop -a . && bundle exec inch --pedantic && bundle exec yard stats --list-undoc && bundle exec rake spec')
+    exec('bundle exec rake spec')
 end

@@ -49,26 +49,12 @@ module TaxGenerator
     #
     # @api public
     def create_directories(*args)
-      args.pmap do |argument|
+      args.each do |argument|
         FileUtils.mkdir_p(argument) unless File.directory?(argument)
       end
     end
 
-    # sets the exception handler for celluloid actors
-    #
-    #
-    # @return [void]
-    #
-    # @api public
-    def set_celluloid_exception_handling
-      Celluloid.logger = app_logger
-      Celluloid.task_class = Celluloid::TaskThread
-      Celluloid.exception_handler do |ex|
-        unless ex.is_a?(Interrupt)
-          log_error(ex)
-        end
-      end
-    end
+
 
     # Reads a file and interpretes it as ERB
     #
@@ -133,7 +119,6 @@ module TaxGenerator
     #
     # @api public
     def execute_with_rescue
-      set_celluloid_exception_handling
       yield if block_given?
     rescue Interrupt
       rescue_interrupt

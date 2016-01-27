@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
 
   s.add_runtime_dependency 'nokogiri', '~> 1.6', '>= 1.6.7'
-  s.add_runtime_dependency 'celluloid', '~> 0.16', '~> 0.16.0'
-  s.add_runtime_dependency 'celluloid-pmap', '~> 0.2', '~> 0.2.2'
+  s.add_runtime_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0'
+  s.add_runtime_dependency 'concurrent-ruby-edge', '> 0' , '>=0'
   s.add_runtime_dependency 'slop', '~> 4.2', '>= 4.2.1'
   s.add_runtime_dependency 'activesupport', '~> 4.2', '>= 4.2.5'
   s.add_runtime_dependency 'rubytree', '~> 0.9', '>= 0.9.6'
@@ -31,8 +31,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov-summary', '~> 0.0.4', '>= 0.0.4'
   s.add_development_dependency 'mocha', '~> 1.1', '>= 1.1'
 
-  s.add_development_dependency 'rubocop', '~> 0.33', '>= 0.33'
-  s.add_development_dependency 'reek', '~> 3.7', '>= 3.7'
+  s.add_development_dependency 'concurrent-ruby-ext', '> 0' , '>=0'
+
   s.add_development_dependency 'yard', '~> 0.8', '>= 0.8.7'
   s.add_development_dependency 'yard-rspec', '~> 0.1', '>= 0.1'
   s.add_development_dependency 'redcarpet', '~> 3.3', '>= 3.3'

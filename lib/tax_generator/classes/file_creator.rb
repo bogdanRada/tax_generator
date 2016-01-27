@@ -1,4 +1,5 @@
 require_relative '../helpers/application_helper'
+require_relative '../helpers/methodic_actor'
 module TaxGenerator
   # class used to create the files
   #
@@ -14,9 +15,9 @@ module TaxGenerator
   #   @return [TaxGenerator::TaxonomyTree] the taxonomy tree holding all the nodes from the taxonomy xml document
   # @!attribute output_folder
   #   @return [String] the output folder where the new files will be created
-  class FileCreator
-    include Celluloid
-    include Celluloid::Logger
+  class FileCreator < Concurrent::Actor::RestartingContext
+    include Concurrent::Async
+    include MethodicActor
     include TaxGenerator::ApplicationHelper
 
     attr_reader :processor, :job, :job_id, :destination, :taxonomy, :output_folder
@@ -40,12 +41,13 @@ module TaxGenerator
     # @return [void]
     #
     # @api public
-    def work(job, manager)
+    def initialize(*args)
+      job = args[0]
+      @processor = args[1]
       job = job.stringify_keys
       @job = job
-      @processor = manager
       process_job(job)
-      @processor.register_worker_for_job(job, Actor.current)
+      processor.register_worker_for_job(job, self)
     end
 
     #  processes the job information by retrieving keys from the hash

@@ -9,7 +9,7 @@ module TaxGenerator
   #   @return [Nokogiri::XML] the xml document used to build the tree
   class TaxonomyTree
     include TaxGenerator::ApplicationHelper
-    attr_reader :root_node, :document
+    attr_reader :root_node, :document, :taxonomies
 
     #  receives a file path that will be parsed and used to build the tree
     # @see Tree::TreeNode#new
@@ -23,6 +23,7 @@ module TaxGenerator
     def initialize(file_path)
       @document = nokogiri_xml(file_path)
       @root_node = TaxGenerator::TaxonomyNode.new('ROOT', 'ROOT')
+      @taxonomies = []
       find_taxonomies
     end
 
@@ -35,11 +36,10 @@ module TaxGenerator
     #
     # @api public
     def find_taxonomies
-      count = 0
-      @document.xpath('.//taxonomy').pmap do |taxonomy_node|
-        count += 1
+      @document.xpath('.//taxonomy').each do |taxonomy_node|
         taxonomy_name = taxonomy_node.at_xpath('.//taxonomy_name')
-        tax_node = insert_node(count.to_s, taxonomy_name.content, @root_node)
+        tax_node = insert_node(SecureRandom.uuid, taxonomy_name.content, @root_node)
+        @taxonomies << tax_node
         add_node(taxonomy_node, tax_node, skip_add: true)
       end
     end
@@ -110,7 +110,7 @@ module TaxGenerator
     def add_node(taxonomy_node, node, options = {})
       tax_node = options[:skip_add].present? ? node : add_taxonomy_node(taxonomy_node, node)
       return unless taxonomy_node.children.any?
-      taxonomy_node.xpath('./node').pmap do |child_node|
+      taxonomy_node.xpath('./node').each do |child_node|
         add_node(child_node, tax_node) if tax_node.present?
       end
     end

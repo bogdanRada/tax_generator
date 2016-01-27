@@ -10,8 +10,8 @@ require 'active_support/core_ext/module/delegation'
 require 'slop'
 require 'nokogiri'
 require 'tree'
-require 'celluloid/autostart'
-require 'celluloid/pmap'
+require 'concurrent'
+require 'concurrent-edge'
 
 require 'logger'
 require 'fileutils'
@@ -20,6 +20,7 @@ require 'erb'
 require 'tilt'
 require 'tilt/erb'
 require 'thread'
+require 'securerandom'
 
 %w(classes helpers).each do |folder_name|
   Gem.find_files("tax_generator/#{folder_name}/**/*.rb").each { |path| require path }

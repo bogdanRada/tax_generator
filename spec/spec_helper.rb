@@ -41,11 +41,3 @@ RSpec.configure do |config|
     end
   end
 end
-
-Celluloid.logger = nil
-
-at_exit do
-  Celluloid::Actor.all.each do |actor|
-    Celluloid::Actor.kill(actor)
-  end
-end

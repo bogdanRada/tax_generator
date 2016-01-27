@@ -5,7 +5,7 @@ describe TaxGenerator::FileCreator do
   let(:output_folder) {"some_other_path" }
   let(:destinations_file_path) {  "some_path" }
   let(:destination_xml) { "some_xml" }
-  let(:subject) { TaxGenerator::FileCreator.new }
+
   let(:first_destination) { "some destination" }
 
   let(:fake_node) { mock }
@@ -16,6 +16,7 @@ describe TaxGenerator::FileCreator do
 
 
   let(:job) { { atlas_id: atlas_id_value, taxonomy: fake_node, destination: first_destination, output_folder: output_folder } }
+
   before(:each) do
     destination_xml.stubs(:at_xpath).returns(fake_node)
     destination_xml.stubs(:xpath).returns([fake_node])
@@ -27,12 +28,13 @@ describe TaxGenerator::FileCreator do
     fake_tilt.stubs(:render).returns(true)
     subject.stubs(:mark_job_completed).returns(true)
     default_processor.stubs(:all_workers_finished).returns(false)
+    default_processor.stubs(:register_worker_for_job).returns(true)
   end
+    let(:subject) {
+      default_processor.stubs(:register_worker_for_job).returns(true)
+      TaxGenerator::FileCreator.new(*[job, default_processor]) }
 
   context 'checks the job keys' do
-    before(:each) do
-      subject.work(job, default_processor)
-    end
 
     specify { expect(subject.job).to eq job.stringify_keys }
     specify { expect(subject.processor).to eq default_processor }
@@ -56,15 +58,9 @@ describe TaxGenerator::FileCreator do
 
   context "job related " do
 
-    before(:each) do
-
-      subject.work(job, default_processor)
-      default_processor.stubs(:register_worker_for_job).returns(true)
-    end
 
     it 'gets start work' do
       details = {details: fake_node, root: root}
-      Actor.stubs(:current).returns(subject)
       subject.stubs(:fetch_atlas_details).returns(details)
       fake_tilt.stubs(:render).with(subject,details).returns(true)
       subject.start_work

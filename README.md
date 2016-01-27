@@ -3,6 +3,12 @@ tax_generator
 
 [![Gem Version](https://badge.fury.io/rb/tax_generator.svg)](http://badge.fury.io/rb/tax_generator) [![Gem Downloads](https://ruby-gem-downloads-badge.herokuapp.com/tax_generator?type=total)](https://github.com/bogdanRada/tax_generator) [![Analytics](https://ga-beacon.appspot.com/UA-72570203-1/bogdanRada/tax_generator)](https://github.com/bogdanRada/tax_generator)
 
+NEW Improvements in version 0.6.0
+---------------------------------
+
+-	a lot of refactoring and bug fixes
+-	removed Celluloid in favor of Concurrent-Ruby for better performance
+
 Description
 -----------
 

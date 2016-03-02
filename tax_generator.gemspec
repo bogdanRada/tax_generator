@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0'
   s.add_runtime_dependency 'concurrent-ruby-edge', '~> 0.2' , '>= 0.2'
   s.add_runtime_dependency 'slop', '~> 4.2', '>= 4.2.1'
-  s.add_runtime_dependency 'activesupport', '~> 4.2', '>= 4.2.5'
+  s.add_runtime_dependency 'activesupport', '>= 4.1', '>= 4.1.0'
   s.add_runtime_dependency 'rubytree', '~> 0.9', '>= 0.9.6'
   s.add_runtime_dependency 'tilt', '~> 2.0', '>= 2.0.1'
 

@@ -102,10 +102,6 @@ Available command line options when executing a command
 
 	-	Represents the destinations xml file name ( Default is 'destinations.xml')
 
-Known Limitations
------------------
-
--	Currently it works only if Celluloid.cores >= 2
 
 Testing
 -------

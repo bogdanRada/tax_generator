@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'rubytree', '~> 0.9', '>= 0.9.6'
   s.add_runtime_dependency 'tilt', '~> 2.0', '>= 2.0.1'
 
-  s.add_development_dependency 'rake', '>= 12.0', '>= 12.0'
+  s.add_development_dependency 'rake', '~> 12.0', '>= 12.0'
   s.add_development_dependency 'rspec', '~> 3.5', '>= 3.5'
   s.add_development_dependency 'simplecov', '~> 0.12', '>= 0.12'
   s.add_development_dependency 'simplecov-summary', '~> 0.0.5', '>= 0.0.5'

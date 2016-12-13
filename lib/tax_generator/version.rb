@@ -15,9 +15,9 @@ module TaxGenerator
     # major release version
     MAJOR = 0
     # minor release version
-    MINOR = 6
+    MINOR = 7
     # tiny release version
-    TINY = 6
+    TINY = 0
     # prelease version ( set this only if it is a prelease)
     PRE = nil
 

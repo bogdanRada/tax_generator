@@ -17,9 +17,9 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
 
-  s.add_runtime_dependency 'nokogiri', '~> 1.6', '>= 1.6.7'
+  s.add_runtime_dependency 'nokogiri', '~> 1.7', '>= 1.7'
   s.add_runtime_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0'
-  s.add_runtime_dependency 'concurrent-ruby-edge', '~> 0.2' , '>= 0.2'
+  s.add_runtime_dependency 'concurrent-ruby-edge', '~> 0.3' , '>= 0.3'
   s.add_runtime_dependency 'slop', '~> 4.4', '>= 4.4.1'
   s.add_runtime_dependency 'activesupport', '>= 4.1', '>= 4.1.0'
   s.add_runtime_dependency 'rubytree', '~> 0.9', '>= 0.9.6'
@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'yard', '~> 0.8', '>= 0.8'
   s.add_development_dependency 'yard-rspec', '~> 0.1', '>= 0.1'
-  s.add_development_dependency 'redcarpet', '~> 3.3', '>= 3.3'
+  s.add_development_dependency 'redcarpet', '~> 3.4', '>= 3.4'
   s.add_development_dependency 'github-markup', '~> 1.4', '>= 1.4.0'
   s.add_development_dependency 'inch', '~> 0.7', '>= 0.7'
 end
